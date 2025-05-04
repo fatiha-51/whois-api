@@ -1,7 +1,15 @@
 FROM python:3.10-slim
 
-RUN apt update && apt install -y whois && pip install fastapi uvicorn
+# Installer les dépendances système
+RUN apt update && apt install -y whois
 
-COPY main.py /main.py
+# Copier les fichiers
+COPY main.py /app/main.py
+COPY requirements.txt /app/requirements.txt
+WORKDIR /app
 
+# Installer les dépendances Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Lancer le serveur
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
